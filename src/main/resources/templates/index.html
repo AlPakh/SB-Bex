@@ -335,9 +335,9 @@
                         uploadStatus.textContent = 'Файл успешно загружен!';
                         progressBar.style.width = '100%';
 
-                        // Редирект на главную страницу после короткой задержки
+                        // Редирект на страницу /files после короткой задержки
                         setTimeout(function () {
-                            window.location.href = '/';
+                            window.location.href = '/files';
                         }, 1000);
                     } else {
                         uploadStatus.textContent = 'Ошибка при загрузке файла.';

@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.util.List;
 
 @Controller
-@RequestMapping("/files")
 public class FileController {
 
     private final FileStorageService storageService;
@@ -24,20 +23,27 @@ public class FileController {
         this.storageService = storageService;
     }
 
-    @GetMapping
+    @GetMapping("/")
+    public String home(Model model) {
+        List<FileDocument> files = storageService.list();
+        model.addAttribute("files", files);
+        return "index";
+    }
+
+    @GetMapping("/files")
     public String listFiles(Model model) {
         List<FileDocument> files = storageService.list();
         model.addAttribute("files", files);
         return "index";
     }
 
-    @PostMapping
+    @PostMapping("/files")
     public String uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
         storageService.upload(file);
         return "redirect:/files";
     }
 
-    @GetMapping("/{id}/download")
+    @GetMapping("/files/{id}/download")
     public ResponseEntity<Resource> downloadFile(@PathVariable String id) {
         FileDocument doc = storageService.list().stream()
                 .filter(f -> f.getId().equals(id))
@@ -51,7 +57,7 @@ public class FileController {
                 .body(resource);
     }
 
-    @GetMapping("/{id}/delete")
+    @GetMapping("/files/{id}/delete")
     public String deleteFile(@PathVariable String id) {
         storageService.delete(id);
         return "redirect:/files";
